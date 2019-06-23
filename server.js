@@ -2,6 +2,9 @@ const express = require('express'),
     mongoose = require('mongoose');
    const cors = require('cors');
 
+const Bundler = require('parcel-bundler');
+
+const bundler = new Bundler('./public/index.html', {});
 const app = express();
 
 app.use(express.json());
@@ -36,7 +39,11 @@ app.use('/student',require('./app/ManageAdmin/routes/studentRouter'));
 app.use('/notice',require('./app/ManageAdmin/routes/noticeRouter'));
 app.use('/assignment', require('./app/ManageAssignment/routes/assignmentRouter'));
 
+app.use(bundler.middleware());
 
+app.get('/', function (req, res) {
+    res.sendFile('./dist/index.html');
+});
 
 app.listen(3001, err => {
     if (err) {
@@ -44,6 +51,6 @@ app.listen(3001, err => {
         return;
     }
 
-    console.log('Application is running on port 3000');
+    console.log('Application is running on port 3001');
 });
 
